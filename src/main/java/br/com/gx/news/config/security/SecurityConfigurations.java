@@ -48,6 +48,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 		.antMatchers(HttpMethod.POST, "/auth").permitAll()
 		.antMatchers(HttpMethod.POST, "/signup").permitAll()
 		.antMatchers(HttpMethod.GET, "/actuator/**").hasRole("ADMIN")
+		.antMatchers(HttpMethod.POST, "/jornal").hasRole("ADMIN")
 		.anyRequest().authenticated()
 		.and().csrf().disable()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

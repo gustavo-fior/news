@@ -30,7 +30,7 @@ public class JornalForm {
 
 	public Jornal toJornal() {
 
-		Jornal jornal = new Jornal(this.nome, this.link);
+		Jornal jornal = new Jornal(this.link, this.nome);
 		return jornal;
 
 	}

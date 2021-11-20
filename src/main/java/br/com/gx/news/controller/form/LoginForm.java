@@ -1,12 +1,13 @@
 package br.com.gx.news.controller.form;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 public class LoginForm {
 
-	@NotBlank
+	@Email
 	private String email;
 	
 	@NotBlank

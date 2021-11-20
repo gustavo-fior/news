@@ -19,7 +19,7 @@ public class Jornal {
 	public Jornal() {
 	}
 
-	public Jornal(String nome, String link) {
+	public Jornal(String link, String nome) {
 		this.nome = nome;
 		this.link = link;
 	}

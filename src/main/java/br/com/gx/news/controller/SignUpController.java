@@ -14,8 +14,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.gx.news.controller.dto.UsuarioDTO;
 import br.com.gx.news.controller.form.CadastroForm;
+import br.com.gx.news.modelo.Perfil;
 import br.com.gx.news.modelo.Usuario;
 import br.com.gx.news.repository.JornalRepository;
+import br.com.gx.news.repository.PerfilRepository;
 import br.com.gx.news.repository.UsuarioRepository;
 import br.com.gx.news.validacao.ValidacaoUsuarioService;
 
@@ -32,11 +34,17 @@ public class SignUpController {
 	@Autowired
 	private JornalRepository jornalRepository;
 
+	@Autowired
+	private PerfilRepository perfilRepository;
+
 	@PostMapping
 	public ResponseEntity<UsuarioDTO> cadastrar(@RequestBody @Valid CadastroForm form,
 			UriComponentsBuilder uriBuilder) {
 
+		Perfil userPerfil = perfilRepository.findByNome("ROLE_USER");
+
 		Usuario usuario = form.toUsuario(form, jornalRepository);
+		usuario.adicionarPerfil(userPerfil);
 
 		if (validacao.isUsuarioUnico(usuario)) {
 

@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -29,9 +28,6 @@ public class Usuario implements UserDetails {
 	private String email;
 	private String senha;
 	
-	@OneToMany
-	private List<Jornal> jornais;
-
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Perfil> perfis = new ArrayList<>();
 
@@ -92,12 +88,8 @@ public class Usuario implements UserDetails {
 		this.senha = senha;
 	}
 
-	public List<Jornal> getJornais() {
-		return jornais;
-	}
-
-	public void setJornais(List<Jornal> jornais) {
-		this.jornais = jornais;
+	public void adicionarPerfil(Perfil perfil) {
+		this.perfis.add(perfil);
 	}
 
 	@Override

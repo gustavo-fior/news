@@ -1,5 +1,6 @@
 package br.com.gx.news.controller.form;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,10 +11,10 @@ import br.com.gx.news.repository.JornalRepository;
 public class CadastroForm {
 
 	private String nome;
-	
-	@NotBlank
+
+	@Email
 	private String email;
-	
+
 	@NotBlank
 	private String senha;
 
@@ -42,16 +43,16 @@ public class CadastroForm {
 	}
 
 	public Usuario toUsuario(CadastroForm form, JornalRepository jornalRepository) {
-		
+
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-		
+
 		Usuario usuario = new Usuario();
 		usuario.setEmail(form.getEmail());
 		usuario.setNome(form.getNome());
 		usuario.setSenha(encoder.encode(form.getSenha()));
-		usuario.setJornais(jornalRepository.findFromStandardTable());
-		
+
 		return usuario;
 	}
+
 
 }
