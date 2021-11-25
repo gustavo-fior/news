@@ -21,9 +21,10 @@ import br.com.gx.news.controller.form.JornalForm;
 import br.com.gx.news.modelo.Jornal;
 import br.com.gx.news.repository.JornalRepository;
 import br.com.gx.news.validacao.ValidacaoJornalService;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
-@RequestMapping("/jornal")
+@RequestMapping("/newspaper")
 public class JornalController {
 
 	@Autowired
@@ -41,6 +42,7 @@ public class JornalController {
 
 	}
 
+	@ApiIgnore
 	@PostMapping
 	public ResponseEntity<JornalDTO> adicionarNovoJornal(@RequestBody @Valid JornalForm form, HttpServletRequest req,
 			UriComponentsBuilder uriBuilder) {

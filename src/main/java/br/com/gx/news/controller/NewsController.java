@@ -1,7 +1,6 @@
 package br.com.gx.news.controller;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -59,39 +58,39 @@ public class NewsController {
 		return ResponseEntity.ok(noticias);
 
 	}
-
-	@GetMapping("/loop")
-	public ResponseEntity<?> fazLoopDasNoticias() {
-
-		// Loop diario para sempre
-		// Melhorar seleção dos links
-		for (LocalDate data = LocalDate.now(); LocalDate.now().isBefore(LocalDate.MAX); data = data.plusDays(1)) {
-
-			List<Jornal> jornais = jornalRepository.findAll();
-
-			jornais.forEach(jornal -> {
-				
-				try {
-					Document document = Jsoup.connect(jornal.getLink()).get();
-					Elements elements = document.getElementsByTag("a");
-					
-					elements.forEach(e -> {
-						String link = e.attr("href");
-						
-						if(!link.substring(link.lastIndexOf("/") + 1).isEmpty() && link.length() >= 60) {
-							System.out.println(link);
-						}
-						
-					});
-					
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			});
-
-		}
-		return ResponseEntity.ok().build();
-
-	}
+	
+//	@GetMapping("/loop")
+//	public ResponseEntity<?> fazLoopDasNoticias() {
+//
+//		// Loop diario para sempre
+//		// Melhorar seleção dos links
+//		for (LocalDate data = LocalDate.now(); LocalDate.now().isBefore(LocalDate.MAX); data = data.plusDays(1)) {
+//
+//			List<Jornal> jornais = jornalRepository.findAll();
+//
+//			jornais.forEach(jornal -> {
+//				
+//				try {
+//					Document document = Jsoup.connect(jornal.getLink()).get();
+//					Elements elements = document.getElementsByTag("a");
+//					
+//					elements.forEach(e -> {
+//						String link = e.attr("href");
+//						
+//						if(!link.substring(link.lastIndexOf("/") + 1).isEmpty() && link.length() >= 60) {
+//							System.out.println(link);
+//						}
+//						
+//					});
+//					
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			});
+//
+//		}
+//		return ResponseEntity.ok().build();
+//
+//	}
 
 }
