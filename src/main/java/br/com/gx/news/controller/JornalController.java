@@ -44,7 +44,7 @@ public class JornalController {
 
 	@ApiIgnore
 	@PostMapping
-	public ResponseEntity<JornalDTO> adicionarNovoJornal(@RequestBody @Valid JornalForm form, HttpServletRequest req,
+	public ResponseEntity<JornalDTO> adicionarNovoJornal(@RequestBody @Valid JornalForm form,
 			UriComponentsBuilder uriBuilder) {
 
 		List<Jornal> jornais = jornalRepository.findAll();

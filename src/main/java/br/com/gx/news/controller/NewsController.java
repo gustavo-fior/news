@@ -3,6 +3,7 @@ package br.com.gx.news.controller;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.jsoup.Jsoup;
@@ -32,65 +33,47 @@ public class NewsController {
 		Set<Noticia> noticias = new HashSet<Noticia>();
 		List<Jornal> jornais = jornalRepository.findAll();
 
-		for (Jornal jornal : jornais) {
-
-			try {
-
-				Document document = Jsoup.connect(jornal.getLink()).get();
-				Elements elements = document.getElementsByTag("a");
-
-				elements.forEach(e -> {
-					String link = e.attr("href");
-
-					if (link.substring(link.lastIndexOf("/") + 1).contains(palavra)) {
-						noticias.add(new Noticia(jornal.getNome(), link));
-					}
-				});
-
-			} catch (IOException e1) {
-
-				return ResponseEntity.badRequest().build();
-
-			}
-
-		}
+		jornais.forEach(jornal -> populaSetComNoticias(palavra, jornal, noticias));
 
 		return ResponseEntity.ok(noticias);
 
 	}
-	
-//	@GetMapping("/loop")
-//	public ResponseEntity<?> fazLoopDasNoticias() {
-//
-//		// Loop diario para sempre
-//		// Melhorar seleção dos links
-//		for (LocalDate data = LocalDate.now(); LocalDate.now().isBefore(LocalDate.MAX); data = data.plusDays(1)) {
-//
-//			List<Jornal> jornais = jornalRepository.findAll();
-//
-//			jornais.forEach(jornal -> {
-//				
-//				try {
-//					Document document = Jsoup.connect(jornal.getLink()).get();
-//					Elements elements = document.getElementsByTag("a");
-//					
-//					elements.forEach(e -> {
-//						String link = e.attr("href");
-//						
-//						if(!link.substring(link.lastIndexOf("/") + 1).isEmpty() && link.length() >= 60) {
-//							System.out.println(link);
-//						}
-//						
-//					});
-//					
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			});
-//
-//		}
-//		return ResponseEntity.ok().build();
-//
-//	}
+
+	@GetMapping("/{nome}/{palavra}")
+	public ResponseEntity<Set<Noticia>> getNoticiasPorJornais(@PathVariable String nome, @PathVariable String palavra) {
+
+		Optional<Jornal> jornal = jornalRepository.findByNomeLike("%" + nome + "%");
+
+		if (jornal.isEmpty())
+			return ResponseEntity.badRequest().build();
+
+		Set<Noticia> noticias = new HashSet<Noticia>();
+
+		populaSetComNoticias(palavra, jornal.get(), noticias);
+
+		return ResponseEntity.ok(noticias);
+
+	}
+
+	// Extrair para uma classe service
+	// Metodo que popula o set com noticias baseado na palavra passada e no jornal
+	private void populaSetComNoticias(String palavra, Jornal jornal, Set<Noticia> noticias) {
+
+		try {
+			Document document = Jsoup.connect(jornal.getLink()).get();
+			Elements elements = document.getElementsByTag("a");
+
+			elements.forEach(e -> {
+				String link = e.attr("href");
+
+				if (link.substring(link.lastIndexOf("/") + 1).contains(palavra)) {
+					noticias.add(new Noticia(jornal.getNome(), link));
+				}
+			});
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+
+	}
 
 }

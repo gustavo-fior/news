@@ -9,4 +9,6 @@ import br.com.gx.news.modelo.Jornal;
 public interface JornalRepository extends JpaRepository<Jornal, Long>{
 
 	Optional<Jornal> findByLink(String link);
+	
+	Optional<Jornal> findByNomeLike(String nome);
 }
