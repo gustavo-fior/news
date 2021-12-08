@@ -42,7 +42,7 @@ public class NewsController {
 	@GetMapping("/{nome}/{palavra}")
 	public ResponseEntity<Set<Noticia>> getNoticiasPorJornais(@PathVariable String nome, @PathVariable String palavra) {
 
-		Optional<Jornal> jornal = jornalRepository.findByNomeLike("%" + nome + "%");
+		Optional<Jornal> jornal = jornalRepository.findByNomeLikeIgnoreCase("%" + nome + "%");
 
 		if (!jornal.isPresent())
 			return ResponseEntity.badRequest().build();

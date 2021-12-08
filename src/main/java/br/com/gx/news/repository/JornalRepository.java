@@ -10,5 +10,5 @@ public interface JornalRepository extends JpaRepository<Jornal, Long>{
 
 	Optional<Jornal> findByLink(String link);
 	
-	Optional<Jornal> findByNomeLike(String nome);
+	Optional<Jornal> findByNomeLikeIgnoreCase(String nome);
 }
