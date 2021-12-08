@@ -44,7 +44,7 @@ public class NewsController {
 
 		Optional<Jornal> jornal = jornalRepository.findByNomeLike("%" + nome + "%");
 
-		if (jornal.isEmpty())
+		if (!jornal.isPresent())
 			return ResponseEntity.badRequest().build();
 
 		Set<Noticia> noticias = new HashSet<Noticia>();
