@@ -5,7 +5,7 @@ Find all the news related to a word/theme from the most reliable newspapers in B
 
 :octocat: -> https://github.com/gustavo-fior/news  
 :joystick: -> https://rapidapi.com/gustavo_fior@outlook.com/api/brazil-news  
-:books: -> https://brazil-news.herokuapp.com/swagger-ui.html  
+:books: -> https://brazil-news.herokuapp.com  
   
 # How to use it  
   
