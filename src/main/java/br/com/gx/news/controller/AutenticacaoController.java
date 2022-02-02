@@ -20,6 +20,7 @@ import br.com.gx.news.controller.form.LoginForm;
 
 @RestController
 @RequestMapping("/auth")
+@CrossOrigin(origins = "http://localhost:3030")
 public class AutenticacaoController {
 	
 	@Autowired
@@ -29,7 +30,6 @@ public class AutenticacaoController {
 	private TokenService tokenService;
 
 	@PostMapping
-	@CrossOrigin(origins = "http://localhost:3030")
 	public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginForm form) {
 		UsernamePasswordAuthenticationToken dadosLogin = form.converter();
 		
