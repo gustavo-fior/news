@@ -28,7 +28,6 @@ public class NewsController {
 	@Autowired
 	private JornalRepository jornalRepository;
 
-	@CrossOrigin(origins = "http://localhost:3030")
 	@GetMapping("/{palavra}")
 	public ResponseEntity<Set<Noticia>> getNoticias(@PathVariable String palavra) {
 
