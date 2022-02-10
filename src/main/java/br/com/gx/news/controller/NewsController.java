@@ -90,7 +90,7 @@ public class NewsController {
 					titulo = h1;
 			}			
 			
-			noticias.add(new Noticia(jornal.getNome(), link, titulo));
+			noticias.add(new Noticia(link, jornal.getNome(), titulo));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
