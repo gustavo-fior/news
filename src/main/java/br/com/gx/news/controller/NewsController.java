@@ -1,6 +1,7 @@
 package br.com.gx.news.controller;
 
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -86,7 +87,10 @@ public class NewsController {
 			String titulo = "";
 			
 			for (String h1 : h1s) {
-				if(h1.toLowerCase().contains(palavra.toLowerCase()))
+				
+				String h1SemAcentos = Normalizer.normalize(h1, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+				
+				if(h1SemAcentos.toLowerCase().contains(palavra.toLowerCase()))
 					titulo = h1;
 			}			
 			
