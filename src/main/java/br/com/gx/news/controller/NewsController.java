@@ -67,7 +67,7 @@ public class NewsController {
 				String link = e.attr("href");
 
 				if (link.substring(link.lastIndexOf("/") + 1).contains(palavra)) {
-					noticias.add(new Noticia(jornal.getNome(), link));
+					adicionaNoticiasNoSet(noticias, link, jornal, palavra);
 				}
 			});
 		} catch (IOException e1) {
@@ -75,5 +75,27 @@ public class NewsController {
 		}
 
 	}
+
+	private void adicionaNoticiasNoSet(Set<Noticia> noticias, String link, Jornal jornal, String palavra) {
+		try {
+
+			Document documentNoticia = Jsoup.connect(link).get();
+			
+			List<String> h1s = documentNoticia.getElementsByTag("h1").eachText();
+			
+			String titulo = "";
+			
+			for (String h1 : h1s) {
+				if(h1.toLowerCase().contains(palavra.toLowerCase()))
+					titulo = h1;
+			}			
+			
+			noticias.add(new Noticia(jornal.getNome(), link, titulo));
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	
 
 }

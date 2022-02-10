@@ -15,10 +15,13 @@ public class Noticia {
 	private Long id;
 	private String link;
 	private String jornal;
+	private String titulo;
 
-	public Noticia(String jornal, String link) {
-		this.jornal = jornal;
+	
+	public Noticia(String link, String jornal, String titulo) {
 		this.link = link;
+		this.jornal = jornal;
+		this.titulo = titulo;
 	}
 
 	public String getLink() {
@@ -28,5 +31,11 @@ public class Noticia {
 	public String getJornal() {
 		return jornal;
 	}
+
+	public String getTitulo() {
+		return titulo;
+	}
+	
+	
 
 }
