@@ -36,6 +36,11 @@ public class NewsController {
 
 		jornais.forEach(jornal -> populaSetComNoticias(palavra, jornal, noticias));
 
+		if (noticias.size() == 0) {
+			noticias.add(new Noticia("mailto:gustavo_fior@outlook.com", "Não achamos nenhuma notícia :(",
+					"Se você acha que isso é um erro, clique no link abaixo e nos avise!"));
+		}
+
 		return ResponseEntity.ok(noticias);
 
 	}
@@ -81,25 +86,23 @@ public class NewsController {
 		try {
 
 			Document documentNoticia = Jsoup.connect(link).get();
-			
+
 			List<String> h1s = documentNoticia.getElementsByTag("h1").eachText();
-			
+
 			String titulo = "";
-			
+
 			for (String h1 : h1s) {
-				
+
 				String h1SemAcentos = Normalizer.normalize(h1, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-				
-				if(h1SemAcentos.toLowerCase().contains(palavra.toLowerCase()))
+
+				if (h1SemAcentos.toLowerCase().contains(palavra.toLowerCase()))
 					titulo = h1;
-			}			
-			
+			}
+
 			noticias.add(new Noticia(link, jornal.getNome(), titulo));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 	}
-	
-	
 
 }
