@@ -13,6 +13,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -46,12 +48,20 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter impleme
 	// Configuracoes de autorizacao
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers(HttpMethod.GET, "/").permitAll().antMatchers(HttpMethod.GET, "/news/**")
-				.permitAll().antMatchers(HttpMethod.POST, "/auth").permitAll().antMatchers(HttpMethod.POST, "/signup")
-				.permitAll().antMatchers(HttpMethod.GET, "/actuator/**").hasRole("ADMIN")
-				.antMatchers(HttpMethod.POST, "/jornal").hasRole("ADMIN").anyRequest().authenticated().and().csrf()
-				.and().cors().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-				.addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, usuarioRepository),
+		http.authorizeRequests().
+		requestMatchers(CorsUtils::isPreFlightRequest).permitAll().
+		antMatchers(HttpMethod.GET, "/").permitAll().
+		antMatchers(HttpMethod.POST, "/auth").permitAll().
+		antMatchers(HttpMethod.POST, "/signup").permitAll().
+		antMatchers(HttpMethod.OPTIONS, "/**").permitAll().
+		antMatchers(HttpMethod.GET, "/actuator/**").hasRole("ADMIN").
+		antMatchers(HttpMethod.POST, "/jornal").hasRole("ADMIN").
+		anyRequest().authenticated().
+		and().
+		csrf().disable().
+		cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()).and().
+		sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
+		and().addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, usuarioRepository),
 						UsernamePasswordAuthenticationFilter.class);
 	}
 
@@ -64,8 +74,10 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter impleme
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**").allowedOrigins("https://brazilnews.herokuapp.com").allowedMethods("GET", "POST", "PUT",
-				"DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT");
+		registry.addMapping("/**").allowedOrigins("http://brazilnews.herokuapp.com").allowedMethods("GET", "POST", "PUT",
+				"DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT").allowedHeaders("Authorization");
 	}
+	
+
 
 }
