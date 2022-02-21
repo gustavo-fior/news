@@ -36,6 +36,11 @@ public class NewsController {
 
 		jornais.forEach(jornal -> populaSetComNoticias(palavra, jornal, noticias));
 
+		if (noticias.size() == 0) {
+			noticias.add(new Noticia("mailto:gustavo_fior@outlook.com", "Não achamos nenhuma notícia :(",
+					"Se você acha que isso é um erro, clique no link abaixo e nos avise!"));
+		}
+
 		return ResponseEntity.ok(noticias);
 
 	}
@@ -51,6 +56,11 @@ public class NewsController {
 		Set<Noticia> noticias = new HashSet<Noticia>();
 
 		populaSetComNoticias(palavra, jornal.get(), noticias);
+		
+		if (noticias.size() == 0) {
+			noticias.add(new Noticia("mailto:gustavo_fior@outlook.com", "Não achamos nenhuma notícia :(",
+					"Se você acha que isso é um erro, clique no link abaixo e nos avise!"));
+		}
 
 		return ResponseEntity.ok(noticias);
 
