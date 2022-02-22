@@ -1,15 +1,10 @@
 package br.com.gx.news.controller;
 
-import java.io.IOException;
-import java.text.Normalizer;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.gx.news.modelo.Jornal;
 import br.com.gx.news.modelo.Noticia;
 import br.com.gx.news.repository.JornalRepository;
+import br.com.gx.news.service.NewsService;
 
 @RestController
 @RequestMapping("/news")
@@ -27,6 +23,9 @@ public class NewsController {
 
 	@Autowired
 	private JornalRepository jornalRepository;
+	
+	@Autowired
+	private NewsService newsService;
 
 	@GetMapping("/{palavra}")
 	public ResponseEntity<Set<Noticia>> getNoticias(@PathVariable String palavra) {
@@ -34,7 +33,7 @@ public class NewsController {
 		Set<Noticia> noticias = new HashSet<Noticia>();
 		List<Jornal> jornais = jornalRepository.findAll();
 
-		jornais.forEach(jornal -> populaSetComNoticias(palavra, jornal, noticias));
+		jornais.forEach(jornal -> newsService.getSetComNoticiasBaseadoNoJornal(palavra, jornal, noticias));
 
 		if (noticias.size() == 0) {
 			noticias.add(new Noticia("mailto:gustavo_fior@outlook.com", "Não achamos nenhuma notícia :(",
@@ -55,7 +54,7 @@ public class NewsController {
 
 		Set<Noticia> noticias = new HashSet<Noticia>();
 
-		populaSetComNoticias(palavra, jornal.get(), noticias);
+		newsService.getSetComNoticiasBaseadoNoJornal(palavra, jornal.get(), noticias);
 		
 		if (noticias.size() == 0) {
 			noticias.add(new Noticia("mailto:gustavo_fior@outlook.com", "Não achamos nenhuma notícia :(",
@@ -66,50 +65,6 @@ public class NewsController {
 
 	}
 
-	// Extrair para uma classe service
-	// Metodo que popula o set com noticias baseado na palavra passada e no jornal
-	private void populaSetComNoticias(String palavra, Jornal jornal, Set<Noticia> noticias) {
-
-		try {
-			Document document = Jsoup.connect(jornal.getLink()).get();
-			Elements elements = document.getElementsByTag("a");
-
-			elements.forEach(e -> {
-				String link = e.attr("href");
-
-				if (link.substring(link.lastIndexOf("/") + 1).contains(palavra)) {
-					adicionaNoticiasComTituloNoSet(noticias, link, jornal, palavra);
-				}
-			});
-
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-
-	}
-
-	private void adicionaNoticiasComTituloNoSet(Set<Noticia> noticias, String link, Jornal jornal, String palavra) {
-
-		try {
-
-			Document documentNoticia = Jsoup.connect(link).get();
-
-			List<String> h1s = documentNoticia.getElementsByTag("h1").eachText();
-
-			String titulo = "";
-
-			for (String h1 : h1s) {
-
-				String h1SemAcentos = Normalizer.normalize(h1, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-
-				if (h1SemAcentos.toLowerCase().contains(palavra.toLowerCase()))
-					titulo = h1;
-			}
-
-			noticias.add(new Noticia(link, jornal.getNome(), titulo));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-	}
+	
 
 }

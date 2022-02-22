@@ -15,6 +15,17 @@ public class Trend {
 	private String image;
 	private String descricao;
 	private String link;
+	
+	
+	public Trend() {
+	}
+
+	public Trend(String titulo, String image, String descricao, String link) {
+		this.titulo = titulo;
+		this.image = image;
+		this.descricao = descricao;
+		this.link = link;
+	}
 
 	public Long getId() {
 		return id;
