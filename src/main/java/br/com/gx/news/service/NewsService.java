@@ -25,8 +25,8 @@ public class NewsService {
 			elements.forEach(e -> {
 				String link = e.attr("href");
 
-				if (link.substring(link.lastIndexOf("/") + 1).contains(palavra)) {
-					adicionaNoticiasComTituloNoSet(noticias, link, jornal, palavra);
+				if (link.substring(link.lastIndexOf("/") + 1).contains(palavra.toLowerCase())) {
+					adicionaNoticiasComTituloNoSet(noticias, link, jornal, palavra.toLowerCase());
 				}
 			});
 

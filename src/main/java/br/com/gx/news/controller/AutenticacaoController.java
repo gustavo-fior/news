@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.gx.news.config.security.TokenService;
-import br.com.gx.news.controller.dto.TokenDto;
+import br.com.gx.news.controller.dto.TokenDTO;
 import br.com.gx.news.controller.form.LoginForm;
 
 @RestController
@@ -30,13 +30,13 @@ public class AutenticacaoController {
 	private TokenService tokenService;
 
 	@PostMapping
-	public ResponseEntity<TokenDto> autenticar(@RequestBody @Valid LoginForm form) {
+	public ResponseEntity<TokenDTO> autenticar(@RequestBody @Valid LoginForm form) {
 		UsernamePasswordAuthenticationToken dadosLogin = form.converter();
 		
 		try {
 			Authentication authentication = authManager.authenticate(dadosLogin);
 			String token = tokenService.gerarToken(authentication);
-			return ResponseEntity.ok(new TokenDto(token, "Bearer"));
+			return ResponseEntity.ok(new TokenDTO(token, "Bearer"));
 		} catch (AuthenticationException e) {
 			return ResponseEntity.badRequest().build();
 		}
