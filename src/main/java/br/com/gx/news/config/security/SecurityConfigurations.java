@@ -57,6 +57,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter impleme
 		antMatchers(HttpMethod.GET, "/newspaper").permitAll().
 		antMatchers(HttpMethod.GET, "/actuator/**").hasRole("ADMIN").
 		antMatchers(HttpMethod.POST, "/newspaper").hasRole("ADMIN").
+		antMatchers(HttpMethod.POST, "/trends/add").hasRole("ADMIN").
 		anyRequest().authenticated().
 		and().
 		csrf().disable().

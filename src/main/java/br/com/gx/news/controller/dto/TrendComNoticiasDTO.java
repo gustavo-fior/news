@@ -1,4 +1,4 @@
-package br.com.gx.news.dto;
+package br.com.gx.news.controller.dto;
 
 import java.util.Set;
 
