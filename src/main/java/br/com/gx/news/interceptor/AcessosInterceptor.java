@@ -41,6 +41,8 @@ public class AcessosInterceptor implements AsyncHandlerInterceptor {
 
 		acesso.setDuracao(Duration.between(acesso.getData(), LocalDateTime.now()));
 
+		acesso.setHttpCode(response.getStatus());
+
 		acessoRepository.save(acesso);
 
 	}

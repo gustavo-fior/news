@@ -17,6 +17,7 @@ public class Acesso {
 	private String path;
 	private LocalDateTime data;
 	private Duration duracao;
+	private Integer httpCode;
 
 	public Long getId() {
 		return id;
@@ -44,6 +45,14 @@ public class Acesso {
 
 	public void setDuracao(Duration duracao) {
 		this.duracao = duracao;
+	}
+
+	public Integer getHttpCode() {
+		return httpCode;
+	}
+
+	public void setHttpCode(Integer httpCode) {
+		this.httpCode = httpCode;
 	}
 
 }
