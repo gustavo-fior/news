@@ -36,8 +36,7 @@ public class NewsService {
 
 	}
 
-	private void adicionaNoticiasComTituloNoSet(Set<Noticia> noticias, String link, Jornal jornal,
-			String palavra) {
+	private void adicionaNoticiasComTituloNoSet(Set<Noticia> noticias, String link, Jornal jornal, String palavra) {
 
 		try {
 
@@ -51,11 +50,12 @@ public class NewsService {
 
 				String h1SemAcentos = Normalizer.normalize(h1, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
 
-				if (h1SemAcentos.toLowerCase().contains(palavra.toLowerCase()))
+				if (h1SemAcentos.toLowerCase().contains(palavra.toLowerCase())) {
 					titulo = h1;
+					noticias.add(new Noticia(link, jornal.getNome(), titulo));
+				}
 			}
 
-			noticias.add(new Noticia(link, jornal.getNome(), titulo));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
