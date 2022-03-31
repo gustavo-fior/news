@@ -16,6 +16,7 @@ import br.com.gx.news.modelo.Noticia;
 @Service
 public class NewsService {
 
+	// Time complexity: O(n)
 	public void getSetComNoticiasBaseadoNoJornal(String palavra, Jornal jornal, Set<Noticia> noticias) {
 
 		try {
@@ -36,6 +37,7 @@ public class NewsService {
 
 	}
 
+	// Time complexity: O(n)
 	private void adicionaNoticiasComTituloNoSet(Set<Noticia> noticias, String link, Jornal jornal, String palavra) {
 
 		try {
