@@ -2,11 +2,13 @@ package br.com.gx.news.config.security;
 
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import br.com.gx.news.modelo.Usuario;
+import br.com.gx.news.repository.UsuarioRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,6 +21,9 @@ public class TokenService {
 	
 	@Value("${news.jwt.secret}")
 	private String secret;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
 	public String gerarToken(Authentication authentication) {
 		Usuario logado = (Usuario) authentication.getPrincipal();
@@ -46,6 +51,23 @@ public class TokenService {
 	public Long getIdUsuario(String token) {
 		Claims claims = Jwts.parser().setSigningKey(this.secret).parseClaimsJws(token).getBody();
 		return Long.parseLong(claims.getSubject());
+	}
+	
+	public Usuario getUserFromToken(String header) {
+		if (header == null || header.isEmpty()) {
+			return null;
+		}
+		
+		String token = header;
+
+		if (header.startsWith("Bearer ")) {
+			token = header.substring(7, header.length());
+		}
+
+		Long userId = getIdUsuario(token);
+		Usuario user = usuarioRepository.findById(userId).get();
+
+		return user;
 	}
 
 }

@@ -23,11 +23,13 @@ public class NewsService {
 			Document document = Jsoup.connect(jornal.getLink()).get();
 			Elements elements = document.getElementsByTag("a");
 
+			String palavraFormatada = palavra.replaceAll(" ", "-").toLowerCase();
+
 			elements.forEach(e -> {
 				String link = e.attr("href");
 
-				if (link.substring(link.lastIndexOf("/") + 1).contains(palavra.toLowerCase())) {
-					adicionaNoticiasComTituloNoSet(noticias, link, jornal, palavra.toLowerCase());
+				if (link.substring(link.lastIndexOf("/") + 1).contains(palavraFormatada)) {
+					adicionaNoticiasComTituloNoSet(noticias, link, jornal, palavra);
 				}
 			});
 
@@ -52,7 +54,7 @@ public class NewsService {
 
 				String h1SemAcentos = Normalizer.normalize(h1, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
 
-				if (h1SemAcentos.toLowerCase().contains(palavra.toLowerCase())) {
+				if (h1SemAcentos.toLowerCase().contains(palavra)) {
 					titulo = h1;
 					noticias.add(new Noticia(link, jornal.getNome(), titulo));
 				}

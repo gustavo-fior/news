@@ -8,15 +8,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
 
+import br.com.gx.news.config.security.TokenService;
 import br.com.gx.news.modelo.Acesso;
+import br.com.gx.news.modelo.Usuario;
 import br.com.gx.news.repository.AcessoRepository;
 
 public class AcessosInterceptor implements AsyncHandlerInterceptor {
 
 	private AcessoRepository acessoRepository;
+	private TokenService tokenService;
 
-	public AcessosInterceptor(AcessoRepository acessoRepository) {
+	public AcessosInterceptor(AcessoRepository acessoRepository, TokenService tokenService) {
 		this.acessoRepository = acessoRepository;
+		this.tokenService = tokenService;
 	}
 
 	@Override
@@ -28,7 +32,7 @@ public class AcessosInterceptor implements AsyncHandlerInterceptor {
 		acesso.setData(LocalDateTime.now());
 
 		request.setAttribute("acesso", acesso);
-
+		
 		return true;
 
 	}
@@ -42,6 +46,12 @@ public class AcessosInterceptor implements AsyncHandlerInterceptor {
 		acesso.setDuracao(Duration.between(acesso.getData(), LocalDateTime.now()));
 
 		acesso.setHttpCode(response.getStatus());
+		
+		if (request.getHeader("Authorization") != null) {
+			
+			Usuario usuario = tokenService.getUserFromToken(request.getHeader("Authorization"));
+			acesso.setUsuario(usuario);
+		}
 
 		acessoRepository.save(acesso);
 

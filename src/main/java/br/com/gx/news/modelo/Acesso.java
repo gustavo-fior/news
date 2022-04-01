@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Acesso {
@@ -18,6 +19,9 @@ public class Acesso {
 	private LocalDateTime data;
 	private Duration duracao;
 	private Integer httpCode;
+
+	@OneToOne
+	private Usuario usuario;
 
 	public Long getId() {
 		return id;
@@ -53,6 +57,14 @@ public class Acesso {
 
 	public void setHttpCode(Integer httpCode) {
 		this.httpCode = httpCode;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 }
